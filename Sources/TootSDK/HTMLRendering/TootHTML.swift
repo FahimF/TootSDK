@@ -13,15 +13,16 @@ public struct TootHTML {
         guard var html = html else { return nil }
 
         let linebreak = "|tootsdk-linebreak|"
-
+        let parabreak = "|tootsdk-parabreak|"
+		
         html = html.replacingOccurrences(of: "<p>", with: "")
-        html = html.replacingOccurrences(of: "</p>", with: linebreak)
+        html = html.replacingOccurrences(of: "</p>", with: parabreak)
         html = html.replacingOccurrences(of: "<br />", with: linebreak)
         html = html.replacingOccurrences(of: "<br>", with: linebreak)
 
         if let doc: SwiftSoup.Document = try? SwiftSoup.parse(html) {
             let removeHTML = try? doc.text()
-            let withLineBreaksAddedBack = removeHTML?.replacingOccurrences(of: linebreak, with: "\n")
+            let withLineBreaksAddedBack = removeHTML?.replacingOccurrences(of: linebreak, with: "\n").replacingOccurrences(of: parabreak, with: "\n\n")
             return withLineBreaksAddedBack
         } else {
             return nil
